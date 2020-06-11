@@ -7,6 +7,16 @@ type GridInfo = {
   entities:  Entity[]
 }
 
+type Coordinates = {
+  x: number
+  y: number
+}
+
+type FoundEntity = {
+  coordinates: Coordinates
+  entity: Entity
+}
+
 export const createGrid = (size: number): GridInfo[][] => {
   const tempGrid = [] as GridInfo[][]
   let x, y
@@ -35,20 +45,10 @@ export const addEntity = (grid: GridInfo[][], x: number, y: number, entity: Enti
   return grid
 }
 
-type Coordinates = {
-  x: number
-  y: number
-}
-
-type FoundEntity = {
-  coordinates: Coordinates
-  entity: Entity
-}
-
 export const findEntity = (grid: GridInfo[][], id: number): any => {
   let x: number, y: number
   let coordinates = {} as Coordinates
-  let foundEntity: any
+  let foundEntity = {} as Entity
   
 
   for (x = 0; x < grid.length; x++) {
@@ -80,7 +80,6 @@ export const moveEntity = (grid: GridInfo[][], entityId: number, direction: stri
 } 
 
 const calculateDirectionMagnitude = (direction: string): Coordinates => {
-  let magnitude = {} as Coordinates
   switch (direction) {
     case 'U':
       return { x: 0, y: -1 }
