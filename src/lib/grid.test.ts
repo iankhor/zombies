@@ -1,4 +1,4 @@
-import { createGrid, addEntity } from 'lib/grid'
+import { createGrid, addEntity, findEntity } from 'lib/grid'
 
 describe('createGrid', () => {
   it('is a square grid', () => {
@@ -49,5 +49,16 @@ describe('addEntity', () => {
     expect(() => addEntity(grid, -1, 3, entity)).toThrow('Invalid grid coordinates !')
     expect(() => addEntity(grid, 0, -1, entity)).toThrow('Invalid grid coordinates !')
     expect(() => addEntity(grid, 0, 4, entity)).toThrow('Invalid grid coordinates !')
+  })
+})
+
+describe('findEntity', () => {
+  it('returns coordinates of entity', () => {
+    const grid = createGrid(5)
+    const entity = { id: 2, type: 'zombie' }
+
+    const updatedGrid = addEntity(grid, 3, 4, entity)
+
+    expect(findEntity(updatedGrid, entity.id)).toEqual({ x: 3, y: 4 })
   })
 })

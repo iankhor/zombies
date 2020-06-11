@@ -35,4 +35,25 @@ export const addEntity = (grid: GridInfo[][], x: number, y: number, entity: Enti
   return grid
 }
 
+type Coordinates = {
+  x: number | null
+  y: number | null
+}
+
+export const findEntity = (grid: GridInfo[][], id: number): Coordinates => {
+  let x: number, y: number
+  let coordinates: Coordinates = { x: null, y: null }
+  
+
+  for (x = 0; x < grid.length; x++) {
+    for (y = 0; y < grid.length; y++) {
+      const isFound = grid[x][y].entities.find(e => e.id === id)
+      if (isFound) coordinates = { x, y }
+    }
+  }
+
+
+  return coordinates
+}
+
 export default {}
