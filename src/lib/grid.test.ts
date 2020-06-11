@@ -1,4 +1,4 @@
-import { createGrid, addEntity, findEntity, removeEntity } from 'lib/grid'
+import { createGrid, addEntity, findEntity, removeEntity, moveEntity } from 'lib/grid'
 
 describe('createGrid', () => {
   it('is a square grid', () => {
@@ -57,7 +57,7 @@ describe('findEntity', () => {
 
     const updatedGrid = addEntity(grid, 3, 4, entity)
 
-    expect(findEntity(updatedGrid, entity.id)).toEqual({ x: 3, y: 4 })
+    expect(findEntity(updatedGrid, entity.id)).toEqual({ coordinates: { x: 3, y: 4 }, entity})
   })
 })
 
@@ -78,5 +78,18 @@ describe('removeEntity', () => {
 
     const updatedGrid = removeEntity(grid, 3, 1, 123)
     expect(updatedGrid[3][1].entities).toEqual([{ id: 9, type: 'zombie' }])
+  })
+})
+
+describe('moveEntity', () => {
+  it('moves to its new position on grid', ()=> {
+    const grid = createGrid(2)
+    const entity = { id: 2, type: 'creature' }
+    grid[0][0].entities = [entity]
+
+    const updatedGrid = moveEntity(grid, 2, 'D')
+
+    expect(updatedGrid[0][0].entities).toEqual([])
+    expect(updatedGrid[0][1].entities).toEqual([entity])
   })
 })
