@@ -79,7 +79,7 @@ export const moveEntity = (grid: GridInfo[][], entityId: number, direction: stri
   return addEntity(removedEntityGrid, currentX + moveX, currentY + moveY, entity)
 } 
 
-const calculateDirectionMagnitude = (direction: string): Coordinates => {
+export const calculateDirectionMagnitude = (direction: string): Coordinates => {
   switch (direction) {
     case 'U':
       return { x: 0, y: -1 }
