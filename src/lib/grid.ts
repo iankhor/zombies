@@ -52,8 +52,13 @@ export const findEntity = (grid: GridInfo[][], id: number): Coordinates => {
     }
   }
 
-
   return coordinates
+}
+
+export const removeEntity = (grid: GridInfo[][], x: number, y: number, entityId: number): GridInfo[][] => {
+  grid[x][y].entities = grid[x][y].entities.filter(e => e.id !== entityId)
+
+  return grid
 }
 
 export default {}

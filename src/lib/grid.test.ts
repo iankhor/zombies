@@ -1,4 +1,4 @@
-import { createGrid, addEntity, findEntity } from 'lib/grid'
+import { createGrid, addEntity, findEntity, removeEntity } from 'lib/grid'
 
 describe('createGrid', () => {
   it('is a square grid', () => {
@@ -21,11 +21,9 @@ describe('createGrid', () => {
 describe('addEntity', () => {
   it('adds an entity to grid based on coordinates', () => {
     const grid = createGrid(4)
-    const coordinateX = 1
-    const coordinateY = 3
     const entity = { id: 2, type: 'zombie' }
 
-    const updatedGrid = addEntity(grid, coordinateX, coordinateY, entity)
+    const updatedGrid = addEntity(grid, 1, 3, entity)
 
     expect(updatedGrid[1][3]).toMatchObject({ entities: [entity] })
   })
@@ -60,5 +58,25 @@ describe('findEntity', () => {
     const updatedGrid = addEntity(grid, 3, 4, entity)
 
     expect(findEntity(updatedGrid, entity.id)).toEqual({ x: 3, y: 4 })
+  })
+})
+
+describe('removeEntity', () => {
+  it('removes an entity to grid based on coordinates', () => {
+    const grid = createGrid(4)
+
+    grid[3][1].entities = [{ id: 9, type: 'zombie' }]
+
+    const updatedGrid = removeEntity(grid, 3, 1, 9)
+    expect(updatedGrid[3][1].entities).toEqual([])
+  })
+
+  it('removes an entity that does not exist', () => {
+    const grid = createGrid(4)
+
+    grid[3][1].entities = [{ id: 9, type: 'zombie' }]
+
+    const updatedGrid = removeEntity(grid, 3, 1, 123)
+    expect(updatedGrid[3][1].entities).toEqual([{ id: 9, type: 'zombie' }])
   })
 })
