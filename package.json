@@ -1,0 +1,32 @@
+{
+  "name": "stocks",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "iankhor <iankhorbc.thecoder@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test:dev": "jest --watch --coverage --verbose",
+    "build:prod": "webpack --mode production",
+    "dev": "webpack-dev-server --hot --mode development"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.1",
+    "@types/webpack-env": "^1.15.2",
+    "dotenv": "^8.2.0",
+    "jest": "^25.4.0",
+    "ts-jest": "^25.4.0",
+    "typescript": "^3.8.3",
+    "webpack-dev-server": "^3.10.3"
+  },
+  "dependencies": {
+    "css-loader": "^3.5.2",
+    "html-webpack-plugin": "^4.2.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "source-map-loader": "^0.2.4",
+    "style-loader": "^1.1.4",
+    "ts-loader": "^7.0.1",
+    "webpack": "^4.42.1",
+    "webpack-cli": "^3.3.11"
+  }
+}
