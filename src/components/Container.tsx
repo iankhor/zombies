@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Input from 'components/Input'
 import CoordinatesPair from 'components/CoordinatesPair'
 import Moves from 'components/Moves'
 
 const Container = () => {
+	const formData: any = useRef({ moves: [] })
 	const [gridSize, setGridSize] = useState(0)
 	const [creatureList, setCreatureList] = useState<JSX.Element[]>([])
 	const [moveSet, setMoveSet] = useState<string[]>([])
@@ -12,28 +13,61 @@ const Container = () => {
 		setCreatureList([
 			...creatureList,
 			<CoordinatesPair
-				key={creatureList.length}
+				onChange={coordinatesOnChange}
+				name={`creature-${creatureList.length}`}
+				key={creatureList.length - 1}
 				label={`Creature ${creatureList.length + 1}`}
 				optionsCount={gridSize}
 			/>,
 		])
 	}
 
+	const gridSizeOnChange = ({ target: { value } }) => {
+		formData.current = {
+			...formData.current,
+			['grid-size']: value,
+		}
+
+		setGridSize(value)
+	}
+
+	const coordinatesOnChange = ({ target: { name, value, id } }) => {
+		formData.current = {
+			...formData.current,
+			[name]: {
+				...formData.current[name],
+				[id]: value,
+			},
+		}
+	}
+
 	const gridSizePresent = !!gridSize && gridSize > 0
 
-	const appendMove = (move: string): void => setMoveSet([...moveSet, move])
+	const appendMove = (move: string): void => {
+		setMoveSet([...moveSet, move])
+		formData.current = {
+			...formData.current,
+			moves: [...formData.current.moves, move],
+		}
+	}
+
+	const onSubmit = (e) => {
+		e.preventDefault()
+		setGridSize(gridSize)
+		console.log(formData.current)
+	}
 
 	return (
-		<>
-			<Input
-				id="grid-size"
-				label="Grid size"
-				placeholder={'ie: 3'}
-				onChange={({ target: { value } }) => setGridSize(value)}
-			/>
+		<form onSubmit={onSubmit}>
+			<Input name="grid-size" label="Grid size" placeholder={'ie: 3'} onChange={gridSizeOnChange} />
 
 			{gridSizePresent && (
-				<CoordinatesPair id="zombie-init" optionsCount={gridSize} label="Initial Position of Zombie" />
+				<CoordinatesPair
+					onChange={coordinatesOnChange}
+					name="zombie-init"
+					optionsCount={gridSize}
+					label="Initial Position of Zombie"
+				/>
 			)}
 
 			{gridSizePresent && (
@@ -58,7 +92,10 @@ const Container = () => {
 				</>
 			)}
 			<pre>{moveSet}</pre>
-		</>
+			<input type="submit" value="Submit" />
+
+			<pre>{JSON.stringify(formData)}</pre>
+		</form>
 	)
 }
 

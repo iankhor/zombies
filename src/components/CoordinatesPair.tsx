@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 
 type CoordinatesPairProps = {
 	optionsCount?: number
-	id?: string
+	name?: string
 	label?: string
-	onSelect?: () => void
+	onChange?: ({ target: { name, value, id } }: { target: { name: string; value: string; id: string } }) => void
 }
 
-const CoordinatesPair = ({ optionsCount = 0, label, id }: CoordinatesPairProps): JSX.Element => {
+const CoordinatesPair = ({ onChange, optionsCount = 0, label, name }: CoordinatesPairProps): JSX.Element => {
 	const optionList = (): JSX.Element[] => {
 		const options = [] as JSX.Element[]
 		for (let i = 0; i < optionsCount; i++) {
@@ -24,8 +24,12 @@ const CoordinatesPair = ({ optionsCount = 0, label, id }: CoordinatesPairProps):
 	return (
 		<p>
 			<label>{label}</label>
-			<select id={`${id}-x`}>{optionList()}</select>
-			<select id={`${id}-y`}>{optionList()}</select>
+			<select onChange={onChange} name={name} id="x">
+				{optionList()}
+			</select>
+			<select onChange={onChange} name={name} id="y">
+				{optionList()}
+			</select>
 		</p>
 	)
 }
