@@ -1,7 +1,7 @@
-import { serializeForm } from 'lib/form'
+import { serializeForm, processForm } from 'lib/form'
 
 describe('serializeForm', () => {
-	it('does magic', () => {
+	it('serializes form', () => {
 		const form = {
 			'grid-size': 6,
 			moves: ['D', 'L'],
@@ -18,6 +18,25 @@ describe('serializeForm', () => {
 				{ x: 2, y: 3 },
 				{ x: 5, y: 1 },
 			],
+		})
+	})
+})
+
+describe('processForm', () => {
+	describe('without creatues', () => {
+		const form = {
+			gridSize: 4,
+			moves: ['D', 'L', 'U', 'U', 'R', 'R'],
+			zombieCoordinates: { x: 2, y: 1 },
+			creatureCoordinates: [],
+		}
+
+		it('generates results', () => {
+			expect(processForm(form)).toMatchObject({
+				score: 3,
+				creatureCoordinates: [],
+				zombieCoordinates: [{ x: 3, y: 0 }],
+			})
 		})
 	})
 })

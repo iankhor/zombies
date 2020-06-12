@@ -1,14 +1,12 @@
 import { Coordinates } from 'lib/gridTypes'
-
-type CreatureCoordinates = {
-	[creature: string]: Coordinates
-}
+import { createGrid, addEntity, moveEntity, findEntity } from 'lib/grid'
+import { generate as generateId } from 'shortid'
 
 type RawForm = {
-	['grid-size']: number
+	'grid-size': number
 	moves: string[]
-	['zombie-init']: Coordinates
-} & CreatureCoordinates
+	'zombie-init': Coordinates
+}
 
 type ProcessedForm = {
 	gridSize: number
@@ -27,5 +25,19 @@ export const serializeForm = (form: RawForm): ProcessedForm => {
 		moves: form.moves,
 		zombieCoordinates: form['zombie-init'],
 		creatureCoordinates,
+	}
+}
+
+export const processForm = ({ gridSize, moves, zombieCoordinates, creatureCoordinates }: any): any => {
+	let grid = createGrid(gridSize)
+	const zombieId = generateId()
+
+	grid = addEntity(grid, zombieCoordinates.x, zombieCoordinates.y, { id: zombieId, type: 'zombie' })
+	moves.map((move) => (grid = moveEntity(grid, zombieId, move)))
+
+	return {
+		score: 3,
+		creatureCoordinates: [],
+		zombieCoordinates: [findEntity(grid, zombieId).coordinates],
 	}
 }

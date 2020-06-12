@@ -25,6 +25,7 @@
     "html-webpack-plugin": "^4.2.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "shortid": "^2.2.15",
     "source-map-loader": "^0.2.4",
     "style-loader": "^1.1.4",
     "ts-loader": "^7.0.1",
