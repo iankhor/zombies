@@ -72,7 +72,10 @@ export const addEntity = (
  * @param entityId the entity entityId that is located in the provided grid
  * @return returns information about the entity and its location
  */
-export const findEntity = (grid: GridInfo[][], entityId: number): any => {
+export const findEntity = (
+	grid: GridInfo[][],
+	entityId: number
+): FoundEntity => {
 	let x: number, y: number
 	let coordinates = {} as Coordinates
 	let foundEntity = {} as Entity
@@ -96,6 +99,7 @@ export const findEntity = (grid: GridInfo[][], entityId: number): any => {
  * @param x horizontal coordinates of the grid
  * @param y vertical coordinates of the grid
  * @param entityId the entity id that is located in the provided grid
+ * @returns an updated grid with the entity removed in desired coordinates
  */
 export const removeEntity = (
 	grid: GridInfo[][],
@@ -115,6 +119,7 @@ export const removeEntity = (
  *                  'L' as left ,
  *                  'R' as right,
  *                  'D' as down, 'U' as up
+ * @returns an updated grid with the entity moved in desired coordinates
  */
 export const moveEntity = (
 	grid: GridInfo[][],
@@ -161,6 +166,27 @@ export const calculateDirectionMagnitude = (direction: string): Coordinates => {
 		default:
 			return { x: 0, y: 0 }
 	}
+}
+
+/**
+ * @param grid a square grid
+ * @param x horizontal coordinates of the grid
+ * @param y vertical coordinates of the grid
+ * @returns an updated grid with the entities in desired coordinates infected to be zombies
+ */
+export const infectGrid = (
+	grid: GridInfo[][],
+	x: number,
+	y: number
+): GridInfo[][] => {
+	const infectedEntities = grid[x][y].entities.map((e) => ({
+		...e,
+		type: 'zombie',
+	}))
+
+	grid[x][y].entities = infectedEntities
+
+	return grid
 }
 
 export default {}

@@ -6,6 +6,7 @@ import {
 	moveEntity,
 	calculateDirectionMagnitude,
 	normaliseCoordinate,
+	infectGrid,
 } from 'lib/grid'
 
 describe('createGrid', () => {
@@ -171,4 +172,25 @@ describe('normaliseCoordinate', () => {
 			)
 		}
 	)
+})
+
+describe('infectGrid', () => {
+	const grid = createGrid(3)
+	grid[1][2] = {
+		entities: [
+			{ id: 2, type: 'creature' },
+			{ id: 3, type: 'anything' },
+			{ id: 4, type: 'creature' },
+		],
+	}
+
+	it('will infect all entities within a grid to become zombies', () => {
+		const updatedGrid = infectGrid(grid, 1, 2)
+
+		const numberofZombies = updatedGrid[1][2].entities.filter(
+			(e) => e.type === 'zombie'
+		).length
+
+		expect(numberofZombies).toEqual(3)
+	})
 })
