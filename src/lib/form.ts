@@ -1,5 +1,5 @@
-import { Coordinates } from 'lib/gridTypes'
-import { createGrid, addEntity, moveEntity, findEntity } from 'lib/grid'
+import { Coordinates, Entity } from 'lib/gridTypes'
+import { createGrid, addEntity, moveEntity, findEntity, infectGrid, findAllEntities } from 'lib/grid'
 import { generate as generateId } from 'shortid'
 
 type RawForm = {
@@ -32,12 +32,23 @@ export const processForm = ({ gridSize, moves, zombieCoordinates, creatureCoordi
 	let grid = createGrid(gridSize)
 	const zombieId = generateId()
 
+	// initialise zombie
 	grid = addEntity(grid, zombieCoordinates.x, zombieCoordinates.y, { id: zombieId, type: 'zombie' })
-	moves.map((move) => (grid = moveEntity(grid, zombieId, move)))
+
+	// initialise creatures
+	creatureCoordinates.forEach(({ x, y }) => {
+		grid = addEntity(grid, x, y, { id: generateId(), type: 'creature' })
+	})
+
+	moves.forEach((move) => {
+		grid = moveEntity(grid, zombieId, move)
+
+		//infect all entities in grid position
+		const { x, y } = findEntity(grid, zombieId).coordinates
+		grid = infectGrid(grid, x, y)
+	})
 
 	return {
-		score: 3,
-		creatureCoordinates: [],
-		zombieCoordinates: [findEntity(grid, zombieId).coordinates],
+		zombieCoordinates: findAllEntities(grid, 'zombie'),
 	}
 }

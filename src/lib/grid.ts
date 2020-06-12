@@ -70,6 +70,30 @@ export const findEntity = (grid: GridInfo[][], entityId: number): FoundEntity =>
 }
 
 /**
+ * @param grid the square grid
+ * @param type the type of entity
+ * @return returns all coordities for an entity type
+ */
+export const findAllEntities = (grid: GridInfo[][], type: string): Coordinates[] => {
+	let x: number, y: number
+	let coordinates = {} as Coordinates
+	let foundEntities = [] as Coordinates[]
+
+	for (x = 0; x < grid.length; x++) {
+		for (y = 0; y < grid.length; y++) {
+			const entity = grid[x][y].entities.find((e) => e.type === type)
+
+			if (entity) {
+				coordinates = { x, y }
+				foundEntities.push(coordinates)
+			}
+		}
+	}
+
+	return foundEntities
+}
+
+/**
  * @param grid a square grid
  * @param x horizontal coordinates of the grid
  * @param y vertical coordinates of the grid

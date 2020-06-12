@@ -23,7 +23,7 @@ describe('serializeForm', () => {
 })
 
 describe('processForm', () => {
-	describe('without creatues', () => {
+	describe('with a zombie without creatures', () => {
 		const form = {
 			gridSize: 4,
 			moves: ['D', 'L', 'U', 'U', 'R', 'R'],
@@ -31,12 +31,29 @@ describe('processForm', () => {
 			creatureCoordinates: [],
 		}
 
-		it('generates results', () => {
+		it('generates zombie coordinates', () => {
 			expect(processForm(form)).toMatchObject({
-				score: 3,
-				creatureCoordinates: [],
 				zombieCoordinates: [{ x: 3, y: 0 }],
 			})
+		})
+	})
+
+	describe('with a zombie with one creature', () => {
+		const form = {
+			gridSize: 4,
+			moves: ['D', 'L', 'U', 'U', 'R', 'R'],
+			zombieCoordinates: { x: 2, y: 1 },
+			creatureCoordinates: [{ x: 1, y: 2 }],
+		}
+
+		// TDD this will break when we introduce move sets for infected zombies
+		fit('generates zombie coordinates', () => {
+			expect(processForm(form).zombieCoordinates).toEqual(
+				expect.arrayContaining([
+					{ x: 3, y: 0 },
+					{ x: 1, y: 2 },
+				])
+			)
 		})
 	})
 })
