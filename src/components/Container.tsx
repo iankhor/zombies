@@ -5,6 +5,7 @@ import Input from 'components/Input'
 import CoordinatesPair from 'components/CoordinatesPair'
 import Moves from 'components/Moves'
 import { Coordinates } from 'lib/universeTypes'
+import containerStyles from 'styles/container.css'
 
 const Container = () => {
 	const formData: any = useRef({ moves: [] })

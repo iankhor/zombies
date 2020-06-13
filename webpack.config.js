@@ -32,6 +32,7 @@ const appConfig = {
 				include: path.resolve(__dirname, 'src'),
 				use: [
 					'style-loader',
+					{ loader: 'css-modules-typescript-loader' },
 					{
 						loader: 'css-loader',
 						options: {
