@@ -1,4 +1,4 @@
-import { Coordinates } from 'lib/gridTypes'
+import { Coordinates } from 'lib/universeTypes'
 
 type RawForm = {
 	'grid-size': number

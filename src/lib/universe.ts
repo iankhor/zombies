@@ -1,4 +1,4 @@
-import { Entity, GridInfo, Coordinates, FoundEntity } from 'lib/gridTypes'
+import { Entity, GridInfo, Coordinates, FoundEntity } from 'lib/universeTypes'
 
 /**
  * @param size dimensions for a square grid
