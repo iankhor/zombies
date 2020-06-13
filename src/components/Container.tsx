@@ -87,7 +87,7 @@ const Container = () => {
 
 	return (
 		<form onSubmit={onSubmit}>
-			<Input name="grid-size" label="Grid size" placeholder={'ie: 3'} onChange={gridSizeOnChange} />
+			<Input name="grid-size" label="Universe size (ie: grid size)" placeholder={'ie: 3'} onChange={gridSizeOnChange} />
 
 			{gridSizePresent && (
 				<CoordinatesPair
