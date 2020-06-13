@@ -24,10 +24,10 @@ const CoordinatesPair = ({ onChange, optionsCount = 0, label, name }: Coordinate
 	return (
 		<p>
 			<label>{label}</label>
-			<select onChange={onChange} name={name} id="x">
+			<select onChange={onChange} name={name} id="x" data-testid={`${name}-x`}>
 				{optionList()}
 			</select>
-			<select onChange={onChange} name={name} id="y">
+			<select onChange={onChange} name={name} id="y" data-testid={`${name}-y`}>
 				{optionList()}
 			</select>
 		</p>
