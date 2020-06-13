@@ -28,15 +28,12 @@ export const serializeForm = (form: RawForm): ProcessedForm => {
 	}
 }
 
-export const processForm = ({ gridSize, moves, zombieCoordinates, creatureCoordinates }: any): any => {
+export const walkOfTheDead = ({ gridSize, moves, zombieCoordinates, creatureCoordinates }: any): any => {
 	let grid = createGrid(gridSize)
 	const zombieId = generateId()
 
 	// initialise zombie
 	grid = addEntity(grid, zombieCoordinates.x, zombieCoordinates.y, { id: zombieId, type: 'zombie' })
-
-	//place zombie in moveSequence
-	const moveSequence = [] as number[]
 
 	// initialise creatures
 	creatureCoordinates.forEach(({ x, y }) => {
@@ -44,32 +41,39 @@ export const processForm = ({ gridSize, moves, zombieCoordinates, creatureCoordi
 	})
 
 	// start zombile apocalypse
-	const { grid: finalGrid } = walkOfTheDead(grid, [zombieId], [], moves)
+	const { grid: finalGrid } = beginInfections(grid, [zombieId], [], moves)
 
 	return {
 		zombieCoordinates: findAllEntities(finalGrid, 'zombie'),
 	}
 }
 
-const walkOfTheDead = (grid, currentZombieIds, pastZombieIds, moves) => {
-	if (currentZombieIds.length === 0) return { grid, zombieIds: [] }
+const newWaveInfections = (grid, currentWaveZombieIds, previousWaveZombieIds, moves) => {
+	let nextWaveZombieIds = [] as number[]
 
-	let zombieIds = [] as number[]
-
-	currentZombieIds.forEach((zId) => {
+	currentWaveZombieIds.forEach((zId) => {
 		moves.forEach((move) => {
 			grid = moveEntity(grid, zId, move)
 
 			const { x, y } = findEntity(grid, zId).coordinates
 			grid = infectGrid(grid, x, y)
 
-			// TODO: refactor
-			const newZombiesIds = grid[x][y].entities.filter((e) => !pastZombieIds.includes(e.id)).map((e) => e.id)
-			const k = newZombiesIds.filter((z) => !currentZombieIds.includes(z))
+			const newInfectionsZombieIds = grid[x][y].entities
+				.filter((e) => !previousWaveZombieIds.includes(e.id))
+				.filter((e) => !currentWaveZombieIds.includes(e.id))
+				.map((e) => e.id)
 
-			zombieIds = [...zombieIds, ...k]
+			nextWaveZombieIds = [...nextWaveZombieIds, ...newInfectionsZombieIds]
 		})
 	})
 
-	return walkOfTheDead(grid, zombieIds, [...currentZombieIds, ...pastZombieIds], moves)
+	return nextWaveZombieIds
+}
+
+const beginInfections = (grid, currentWaveZombieIds, previousWaveZombieIds, moves) => {
+	if (currentWaveZombieIds.length === 0) return { grid, zombieIds: [] }
+
+	const nextWaveZombieIds = newWaveInfections(grid, currentWaveZombieIds, previousWaveZombieIds, moves)
+
+	return beginInfections(grid, nextWaveZombieIds, [...currentWaveZombieIds, ...previousWaveZombieIds], moves)
 }

@@ -1,4 +1,4 @@
-import { serializeForm, processForm } from 'lib/form'
+import { serializeForm, walkOfTheDead } from 'lib/form'
 
 describe('serializeForm', () => {
 	it('serializes form', () => {
@@ -22,7 +22,7 @@ describe('serializeForm', () => {
 	})
 })
 
-describe('processForm', () => {
+describe('walkOfTheDead', () => {
 	describe('with a zombie without creatures', () => {
 		const form = {
 			gridSize: 4,
@@ -32,13 +32,13 @@ describe('processForm', () => {
 		}
 
 		it('generates zombie coordinates', () => {
-			expect(processForm(form)).toMatchObject({
+			expect(walkOfTheDead(form)).toMatchObject({
 				zombieCoordinates: [{ x: 3, y: 0 }],
 			})
 		})
 	})
 
-	describe('with a zombie with one creature', () => {
+	describe('with a zombie with multiple creatures', () => {
 		const form = {
 			gridSize: 4,
 			moves: ['D', 'L', 'U', 'U', 'R', 'R'],
@@ -51,7 +51,7 @@ describe('processForm', () => {
 		}
 
 		it('generates zombie coordinates', () => {
-			expect(processForm(form).zombieCoordinates).toEqual(
+			expect(walkOfTheDead(form).zombieCoordinates).toEqual(
 				expect.arrayContaining([
 					{ x: 3, y: 0 },
 					{ x: 2, y: 1 },
