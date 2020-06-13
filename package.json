@@ -1,37 +1,43 @@
 {
-  "name": "stocks",
-  "version": "1.0.0",
-  "main": "index.js",
-  "author": "iankhor <iankhorbc.thecoder@gmail.com>",
-  "license": "MIT",
-  "scripts": {
-    "test:dev": "jest --watch --coverage --verbose",
-    "build:prod": "webpack --mode production",
-    "dev": "webpack-dev-server --hot --mode development"
-  },
-  "devDependencies": {
-    "@testing-library/jest-dom": "^5.10.0",
-    "@testing-library/react": "^10.2.1",
-    "@types/jest": "^25.2.1",
-    "@types/webpack-env": "^1.15.2",
-    "dotenv": "^8.2.0",
-    "jest": "^25.4.0",
-    "ts-jest": "^25.4.0",
-    "typescript": "^3.8.3",
-    "webpack-dev-server": "^3.10.3"
-  },
-  "dependencies": {
-    "@types/react": "^16.9.36",
-    "@types/react-dom": "^16.9.8",
-    "css-loader": "^3.5.2",
-    "html-webpack-plugin": "^4.2.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "shortid": "^2.2.15",
-    "source-map-loader": "^0.2.4",
-    "style-loader": "^1.1.4",
-    "ts-loader": "^7.0.1",
-    "webpack": "^4.42.1",
-    "webpack-cli": "^3.3.11"
-  }
+	"name": "stocks",
+	"version": "1.0.0",
+	"main": "index.js",
+	"author": "iankhor <iankhorbc.thecoder@gmail.com>",
+	"license": "MIT",
+	"config": {
+		"jest": "jest --config=jest.config.js"
+	},
+	"scripts": {
+		"build": "webpack --mode production",
+		"start": "./node_modules/webpack/bin/webpack.js -p --progress && node ./dist/server.js",
+		"dev": "webpack-dev-server --mode development",
+		"test:dev": "${npm_package_config_jest} --watch --coverage --verbose",
+		"test:ci": "${npm_package_config_jest} --ci --coverage"
+	},
+	"devDependencies": {
+		"@testing-library/jest-dom": "^5.10.0",
+		"@testing-library/react": "^10.2.1",
+		"@types/jest": "^25.2.1",
+		"@types/webpack-env": "^1.15.2",
+		"dotenv": "^8.2.0",
+		"jest": "^25.4.0",
+		"ts-jest": "^25.4.0",
+		"typescript": "^3.8.3",
+		"webpack-dev-server": "^3.10.3"
+	},
+	"dependencies": {
+		"@types/react": "^16.9.36",
+		"@types/react-dom": "^16.9.8",
+		"css-loader": "^3.5.2",
+		"express": "^4.17.1",
+		"html-webpack-plugin": "^4.2.0",
+		"react": "^16.13.1",
+		"react-dom": "^16.13.1",
+		"shortid": "^2.2.15",
+		"source-map-loader": "^0.2.4",
+		"style-loader": "^1.1.4",
+		"ts-loader": "^7.0.1",
+		"webpack": "^4.42.1",
+		"webpack-cli": "^3.3.11"
+	}
 }
