@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useReducer } from 'react'
 import { serializeForm, simpleFormValidation } from 'lib/form'
 import walkOfTheDead from 'lib/Tvirus'
 import Input from 'components/Input'
@@ -6,17 +6,22 @@ import CoordinatesPair from 'components/CoordinatesPair'
 import Moves from 'components/Moves'
 import { Coordinates } from 'lib/universeTypes'
 import basic from 'styles/basic.css'
+import reducer, {
+	initialState,
+	SET_FORM_ERROR,
+	SET_SCORE,
+	SET_UNIVERSE_SIZE,
+	RESET_UNIVERSE,
+	SET_ZOMBIE_MOVESET,
+	SET_ZOMBIES_COORDINATES,
+} from 'lib/reducer'
 import Zombie from '../assets/zombie.png'
 
 const Container = (): JSX.Element => {
+	const [state, dispatch] = useReducer(reducer, initialState)
 	const formData: any = useRef({ moves: [] })
-	const [gridSize, setGridSize] = useState(0)
 	const [creatureList, setCreatureList] = useState<JSX.Element[]>([])
-	const [moveSet, setMoveSet] = useState<string[]>([])
-	const [formError, setFormError] = useState(false)
-
-	const [score, setScore] = useState(0)
-	const [zombieCoordinates, setZombieCoordinates] = useState<Coordinates[]>([])
+	const gridSizePresent = !!state.universeSize && state.universeSize > 0
 
 	const addCreature = (e: React.SyntheticEvent) => {
 		e.preventDefault()
@@ -27,7 +32,7 @@ const Container = (): JSX.Element => {
 				name={`creature-${creatureList.length}`}
 				key={creatureList.length - 1}
 				label={`Creature ${creatureList.length + 1}`}
-				optionsCount={gridSize}
+				optionsCount={state.universeSize}
 			/>,
 		])
 	}
@@ -38,7 +43,7 @@ const Container = (): JSX.Element => {
 			['grid-size']: value,
 		}
 
-		setGridSize(value)
+		dispatch({ type: SET_UNIVERSE_SIZE, value })
 	}
 
 	const coordinatesOnChange = ({ target: { name, value, id } }) => {
@@ -51,11 +56,9 @@ const Container = (): JSX.Element => {
 		}
 	}
 
-	const gridSizePresent = !!gridSize && gridSize > 0
-
 	const appendMove = (move: string, e: React.SyntheticEvent): void => {
 		e.preventDefault()
-		setMoveSet([...moveSet, move])
+		dispatch({ type: SET_ZOMBIE_MOVESET, value: move })
 		formData.current = {
 			...formData.current,
 			moves: [...formData.current.moves, move],
@@ -63,27 +66,24 @@ const Container = (): JSX.Element => {
 	}
 
 	const onReset = (e: React.SyntheticEvent) => {
-		e.preventDefault()
-		setGridSize(0)
 		formData.current = { moves: [] }
-		setScore(0)
-		setZombieCoordinates([])
-		setFormError(false)
+		e.preventDefault()
 		setCreatureList([])
+		dispatch({ type: RESET_UNIVERSE, value: null })
 	}
 
 	const onSubmit = (e: React.SyntheticEvent) => {
 		e.preventDefault()
-		setFormError(false)
+		dispatch({ type: SET_FORM_ERROR, value: false })
 		const form = serializeForm(formData.current)
 		const isValid = simpleFormValidation(form)
 
 		if (isValid) {
 			const { score, zombieCoordinates } = walkOfTheDead(form)
-			setScore(score)
-			setZombieCoordinates(zombieCoordinates)
+			dispatch({ type: SET_SCORE, value: score })
+			dispatch({ type: SET_ZOMBIES_COORDINATES, value: zombieCoordinates })
 		} else {
-			setFormError(true)
+			dispatch({ type: SET_FORM_ERROR, value: true })
 		}
 	}
 
@@ -102,7 +102,7 @@ const Container = (): JSX.Element => {
 					<CoordinatesPair
 						onChange={coordinatesOnChange}
 						name="zombie-init"
-						optionsCount={gridSize}
+						optionsCount={state.universeSize}
 						label="Zombie Zero Location"
 					/>
 
@@ -126,7 +126,7 @@ const Container = (): JSX.Element => {
 						leftClick={(e) => appendMove('L', e)}
 						rightClick={(e) => appendMove('R', e)}
 					/>
-					<pre className={basic.center}>{`zombie move set: ${moveSet}`}</pre>
+					<pre className={basic.center}>{`zombie move set: ${state.moveSet}`}</pre>
 
 					<div className={basic.center}>
 						<input type="submit" value="Submit" />
@@ -137,9 +137,9 @@ const Container = (): JSX.Element => {
 
 					<hr></hr>
 					<strong>Apocalpypse Outcome</strong>
-					<pre>{`score: ${score}`}</pre>
-					<pre>{`Zombie Positions: ${JSON.stringify(zombieCoordinates)}`}</pre>
-					{formError && <pre>Oops something isn't right, check your inputs</pre>}
+					<pre>{`score: ${state.score}`}</pre>
+					<pre>{`Zombie Positions: ${JSON.stringify(state.zombieCoordinates)}`}</pre>
+					{state.formError && <pre>Oops something isn't right, check your inputs</pre>}
 				</>
 			)}
 		</form>
