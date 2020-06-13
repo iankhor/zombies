@@ -25,3 +25,12 @@ export const serializeForm = (form: RawForm): ProcessedForm => {
 		creatureCoordinates,
 	}
 }
+
+export const simpleFormValidation = ({
+	gridSize,
+	moves,
+	zombieCoordinates,
+	creatureCoordinates,
+}: ProcessedForm): boolean => {
+	return !!(gridSize && moves?.length && Object.keys(zombieCoordinates)?.length && creatureCoordinates?.length)
+}

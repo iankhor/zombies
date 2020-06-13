@@ -1,15 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react'
-import { serializeForm } from 'lib/form'
+import React, { useState, useRef } from 'react'
+import { serializeForm, simpleFormValidation } from 'lib/form'
 import walkOfTheDead from 'lib/Tvirus'
 import Input from 'components/Input'
 import CoordinatesPair from 'components/CoordinatesPair'
 import Moves from 'components/Moves'
+import { Coordinates } from 'lib/universeTypes'
 
 const Container = () => {
 	const formData: any = useRef({ moves: [] })
 	const [gridSize, setGridSize] = useState(0)
 	const [creatureList, setCreatureList] = useState<JSX.Element[]>([])
 	const [moveSet, setMoveSet] = useState<string[]>([])
+	const [formError, setFormError] = useState(false)
+
+	const [score, setScore] = useState(0)
+	const [zombieCoordinates, setZombieCoordinates] = useState<Coordinates[]>([])
 
 	const addCreature = (e: React.SyntheticEvent) => {
 		e.preventDefault()
@@ -55,11 +60,29 @@ const Container = () => {
 		}
 	}
 
+	const onReset = (e: React.SyntheticEvent) => {
+		e.preventDefault()
+		setGridSize(0)
+		formData.current = { moves: [] }
+		setScore(0)
+		setZombieCoordinates([])
+		setFormError(false)
+		setCreatureList([])
+	}
+
 	const onSubmit = (e: React.SyntheticEvent) => {
 		e.preventDefault()
+		setFormError(false)
+		const form = serializeForm(formData.current)
+		const isValid = simpleFormValidation(form)
 
-		console.log(serializeForm(formData.current))
-		// console.log(walkOfTheDead(serializeForm(formData.current)))
+		if (isValid) {
+			const { score, zombieCoordinates } = walkOfTheDead(form)
+			setScore(score)
+			setZombieCoordinates(zombieCoordinates)
+		} else {
+			setFormError(true)
+		}
 	}
 
 	return (
@@ -96,8 +119,16 @@ const Container = () => {
 					/>
 				</>
 			)}
-			<pre>{moveSet}</pre>
+			<pre>{`zombie move set: ${moveSet}`}</pre>
+
 			<input type="submit" value="Submit" />
+			<button role="reset" onClick={onReset}>
+				Reset
+			</button>
+
+			<pre>{`score: ${score}`}</pre>
+			<pre>{`Zombie Positions: ${JSON.stringify(zombieCoordinates)}`}</pre>
+			{formError && <pre>Oops something isn't right, check your inputs</pre>}
 		</form>
 	)
 }
