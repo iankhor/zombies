@@ -24,6 +24,7 @@ Prerequisites: [yarn](https://github.com/yarnpkg/yarn)
 2. run `yarn install`
 3. run `yarn start`
 4. On a browser, go to `localhost:8080`
+5. Fill and submit the form to setup the zombie universe. See animated demo above for example
 
 To run test
 
