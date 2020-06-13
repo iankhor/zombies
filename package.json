@@ -10,6 +10,8 @@
     "dev": "webpack-dev-server --hot --mode development"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.10.0",
+    "@testing-library/react": "^10.2.1",
     "@types/jest": "^25.2.1",
     "@types/webpack-env": "^1.15.2",
     "dotenv": "^8.2.0",
