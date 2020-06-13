@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
+import { serializeForm } from 'lib/form'
+import walkOfTheDead from 'lib/Tvirus'
 import Input from 'components/Input'
 import CoordinatesPair from 'components/CoordinatesPair'
 import Moves from 'components/Moves'
@@ -9,7 +11,8 @@ const Container = () => {
 	const [creatureList, setCreatureList] = useState<JSX.Element[]>([])
 	const [moveSet, setMoveSet] = useState<string[]>([])
 
-	const addCreature = () => {
+	const addCreature = (e: React.SyntheticEvent) => {
+		e.preventDefault()
 		setCreatureList([
 			...creatureList,
 			<CoordinatesPair
@@ -36,14 +39,15 @@ const Container = () => {
 			...formData.current,
 			[name]: {
 				...formData.current[name],
-				[id]: value,
+				[id]: value || 0,
 			},
 		}
 	}
 
 	const gridSizePresent = !!gridSize && gridSize > 0
 
-	const appendMove = (move: string): void => {
+	const appendMove = (move: string, e: React.SyntheticEvent): void => {
+		e.preventDefault()
 		setMoveSet([...moveSet, move])
 		formData.current = {
 			...formData.current,
@@ -51,10 +55,11 @@ const Container = () => {
 		}
 	}
 
-	const onSubmit = (e) => {
+	const onSubmit = (e: React.SyntheticEvent) => {
 		e.preventDefault()
-		setGridSize(gridSize)
-		console.log(formData.current)
+
+		console.log(serializeForm(formData.current))
+		// console.log(walkOfTheDead(serializeForm(formData.current)))
 	}
 
 	return (
@@ -84,17 +89,15 @@ const Container = () => {
 						<label>Construct zombie moves</label>
 					</p>
 					<Moves
-						upClick={() => appendMove('U')}
-						downClick={() => appendMove('D')}
-						leftClick={() => appendMove('L')}
-						rightClick={() => appendMove('R')}
+						upClick={(e) => appendMove('U', e)}
+						downClick={(e) => appendMove('D', e)}
+						leftClick={(e) => appendMove('L', e)}
+						rightClick={(e) => appendMove('R', e)}
 					/>
 				</>
 			)}
 			<pre>{moveSet}</pre>
 			<input type="submit" value="Submit" />
-
-			<pre>{JSON.stringify(formData)}</pre>
 		</form>
 	)
 }

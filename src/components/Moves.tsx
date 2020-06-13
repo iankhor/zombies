@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
 
 type MovesProps = {
-	upClick?: () => void
-	downClick?: () => void
-	leftClick?: () => void
-	rightClick?: () => void
+	upClick?: (e: React.SyntheticEvent) => void
+	downClick?: (e: React.SyntheticEvent) => void
+	leftClick?: (e: React.SyntheticEvent) => void
+	rightClick?: (e: React.SyntheticEvent) => void
 }
 
 const Moves = ({ upClick, downClick, leftClick, rightClick }: MovesProps): JSX.Element => (

@@ -9,7 +9,7 @@ type CoordinatesPairProps = {
 
 const CoordinatesPair = ({ onChange, optionsCount = 0, label, name }: CoordinatesPairProps): JSX.Element => {
 	const optionList = (): JSX.Element[] => {
-		const options = [] as JSX.Element[]
+		const options = [<option key={-1} value={'-'}></option>] as JSX.Element[]
 		for (let i = 0; i < optionsCount; i++) {
 			options.push(
 				<option key={i} value={i}>
