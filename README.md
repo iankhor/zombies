@@ -14,7 +14,7 @@ Animated demo below
 
 TBA
 
-<!-- ![](/docs/demo.gif) -->
+<!-- ![](/docs/demo.gif) -->docs
 
 ## Instructions
 

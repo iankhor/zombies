@@ -20,5 +20,10 @@
 }
 
 .center {
+	padding-top: 0.5rem;
 	text-align: center;
+}
+
+.logo {
+	width: 10rem;
 }

@@ -6,8 +6,9 @@ import CoordinatesPair from 'components/CoordinatesPair'
 import Moves from 'components/Moves'
 import { Coordinates } from 'lib/universeTypes'
 import basic from 'styles/basic.css'
+import Zombie from '../assets/zombie.png'
 
-const Container = () => {
+const Container = (): JSX.Element => {
 	const formData: any = useRef({ moves: [] })
 	const [gridSize, setGridSize] = useState(0)
 	const [creatureList, setCreatureList] = useState<JSX.Element[]>([])
@@ -88,6 +89,9 @@ const Container = () => {
 
 	return (
 		<form onSubmit={onSubmit}>
+			<div className={basic.center}>
+				<img className={basic.logo} src={Zombie}></img>
+			</div>
 			<div className={basic.center}>
 				<pre>Enter a number to create the size of the zombie universe</pre>
 			</div>
