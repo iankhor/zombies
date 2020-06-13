@@ -12,9 +12,7 @@ Deployed app is at [https://al-zombie.herokuapp.com/](https://al-zombie.herokuap
 
 Animated demo below
 
-TBA
-
-<!-- ![](/docs/demo.gif) -->docs
+![](/docs/demo.gif)
 
 ## Instructions
 
