@@ -35,20 +35,41 @@ export const processForm = ({ gridSize, moves, zombieCoordinates, creatureCoordi
 	// initialise zombie
 	grid = addEntity(grid, zombieCoordinates.x, zombieCoordinates.y, { id: zombieId, type: 'zombie' })
 
+	//place zombie in moveSequence
+	const moveSequence = [] as number[]
+
 	// initialise creatures
 	creatureCoordinates.forEach(({ x, y }) => {
 		grid = addEntity(grid, x, y, { id: generateId(), type: 'creature' })
 	})
 
-	moves.forEach((move) => {
-		grid = moveEntity(grid, zombieId, move)
-
-		//infect all entities in grid position
-		const { x, y } = findEntity(grid, zombieId).coordinates
-		grid = infectGrid(grid, x, y)
-	})
+	// start zombile apocalypse
+	const { grid: finalGrid } = walkOfTheDead(grid, [zombieId], [], moves)
 
 	return {
-		zombieCoordinates: findAllEntities(grid, 'zombie'),
+		zombieCoordinates: findAllEntities(finalGrid, 'zombie'),
 	}
+}
+
+const walkOfTheDead = (grid, currentZombieIds, pastZombieIds, moves) => {
+	if (currentZombieIds.length === 0) return { grid, zombieIds: [] }
+
+	let zombieIds = [] as number[]
+
+	currentZombieIds.forEach((zId) => {
+		moves.forEach((move) => {
+			grid = moveEntity(grid, zId, move)
+
+			const { x, y } = findEntity(grid, zId).coordinates
+			grid = infectGrid(grid, x, y)
+
+			// TODO: refactor
+			const newZombiesIds = grid[x][y].entities.filter((e) => !pastZombieIds.includes(e.id)).map((e) => e.id)
+			const k = newZombiesIds.filter((z) => !currentZombieIds.includes(z))
+
+			zombieIds = [...zombieIds, ...k]
+		})
+	})
+
+	return walkOfTheDead(grid, zombieIds, [...currentZombieIds, ...pastZombieIds], moves)
 }

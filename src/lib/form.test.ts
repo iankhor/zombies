@@ -43,15 +43,20 @@ describe('processForm', () => {
 			gridSize: 4,
 			moves: ['D', 'L', 'U', 'U', 'R', 'R'],
 			zombieCoordinates: { x: 2, y: 1 },
-			creatureCoordinates: [{ x: 1, y: 2 }],
+			creatureCoordinates: [
+				{ x: 0, y: 1 },
+				{ x: 1, y: 2 },
+				{ x: 3, y: 1 },
+			],
 		}
 
-		// TDD this will break when we introduce move sets for infected zombies
-		fit('generates zombie coordinates', () => {
+		it('generates zombie coordinates', () => {
 			expect(processForm(form).zombieCoordinates).toEqual(
 				expect.arrayContaining([
 					{ x: 3, y: 0 },
-					{ x: 1, y: 2 },
+					{ x: 2, y: 1 },
+					{ x: 1, y: 0 },
+					{ x: 0, y: 0 },
 				])
 			)
 		})
