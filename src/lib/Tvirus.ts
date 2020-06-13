@@ -14,15 +14,17 @@ export const walkOfTheDead = ({ gridSize, moves, zombieCoordinates, creatureCoor
 	})
 
 	// start zombile apocalypse
-	const { grid: finalGrid } = beginInfections(grid, [zombieId], [], moves)
+	const { grid: finalGrid, score } = beginInfections(grid, [zombieId], [], moves)
 
 	return {
+		score,
 		zombieCoordinates: findAllEntities(finalGrid, 'zombie'),
 	}
 }
 
 const newWaveInfections = (grid, currentWaveZombieIds, previousWaveZombieIds, moves) => {
 	let nextWaveZombieIds = [] as number[]
+	let newInfectionCount = 0
 
 	currentWaveZombieIds.forEach((zId) => {
 		moves.forEach((move) => {
@@ -36,19 +38,27 @@ const newWaveInfections = (grid, currentWaveZombieIds, previousWaveZombieIds, mo
 				.filter((e) => !currentWaveZombieIds.includes(e.id))
 				.map((e) => e.id)
 
+			newInfectionCount = newInfectionCount + newInfectionsZombieIds.length
 			nextWaveZombieIds = [...nextWaveZombieIds, ...newInfectionsZombieIds]
 		})
 	})
 
-	return nextWaveZombieIds
+	return { nextWaveZombieIds, newInfectionCount }
 }
 
-const beginInfections = (grid, currentWaveZombieIds, previousWaveZombieIds, moves) => {
-	if (currentWaveZombieIds.length === 0) return { grid, zombieIds: [] }
+const beginInfections = (grid, currentWaveZombieIds, previousWaveZombieIds, moves, score = 0) => {
+	if (currentWaveZombieIds.length === 0) return { grid, score }
 
-	const nextWaveZombieIds = newWaveInfections(grid, currentWaveZombieIds, previousWaveZombieIds, moves)
+	const { nextWaveZombieIds, newInfectionCount } = newWaveInfections(
+		grid,
+		currentWaveZombieIds,
+		previousWaveZombieIds,
+		moves
+	)
 
-	return beginInfections(grid, nextWaveZombieIds, [...currentWaveZombieIds, ...previousWaveZombieIds], moves)
+	const infectionQueue = [...currentWaveZombieIds, ...previousWaveZombieIds]
+
+	return beginInfections(grid, nextWaveZombieIds, infectionQueue, moves, score + newInfectionCount)
 }
 
 export default walkOfTheDead

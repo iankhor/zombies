@@ -38,5 +38,9 @@ describe('walkOfTheDead', () => {
 				])
 			)
 		})
+
+		it('generates zombies score', () => {
+			expect(walkOfTheDead(form).score).toEqual(3)
+		})
 	})
 })
