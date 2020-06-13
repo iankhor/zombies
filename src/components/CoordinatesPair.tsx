@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import grid from 'styles/basic.css'
 
 type CoordinatesPairProps = {
 	optionsCount?: number
@@ -22,15 +23,23 @@ const CoordinatesPair = ({ onChange, optionsCount = 0, label, name }: Coordinate
 	}
 
 	return (
-		<p>
+		<div className={grid.threeColumn}>
 			<label>{label}</label>
-			<select onChange={onChange} name={name} id="x" data-testid={`${name}-x`}>
-				{optionList()}
-			</select>
-			<select onChange={onChange} name={name} id="y" data-testid={`${name}-y`}>
-				{optionList()}
-			</select>
-		</p>
+
+			<div className={grid.twoColumn}>
+				<label>X:</label>
+				<select onChange={onChange} name={name} id="x" data-testid={`${name}-x`}>
+					{optionList()}
+				</select>
+			</div>
+
+			<div className={grid.twoColumn}>
+				<label>Y:</label>
+				<select onChange={onChange} name={name} id="y" data-testid={`${name}-y`}>
+					{optionList()}
+				</select>
+			</div>
+		</div>
 	)
 }
 

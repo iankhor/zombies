@@ -1,4 +1,5 @@
 import React from 'react'
+import grid from 'styles/basic.css'
 
 type InputProps = {
 	label?: string
@@ -9,12 +10,10 @@ type InputProps = {
 
 const Input = ({ name, label, onChange, placeholder }: InputProps): JSX.Element => {
 	return (
-		<p>
-			<label>
-				{label}
-				<input name={name} onChange={onChange} placeholder={placeholder} />
-			</label>
-		</p>
+		<div className={grid.twoColumn}>
+			<div>{label}</div>
+			<input data-testid={name} onChange={onChange} placeholder={placeholder} />
+		</div>
 	)
 }
 

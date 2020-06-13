@@ -5,9 +5,9 @@ import { render, fireEvent } from '@testing-library/react'
 
 describe('submitting the inputs to start the zombie apocalypse', () => {
 	it('can show us the scores and zombies position after entering inputs', () => {
-		const { getByLabelText, getByText, getByTestId, debug } = render(<Container />)
+		const { getByText, getByTestId, debug } = render(<Container />)
 
-		const uniserveSizeInput = getByLabelText('Universe size (ie: grid size)')
+		const uniserveSizeInput = getByTestId('grid-size')
 
 		fireEvent.change(uniserveSizeInput, { target: { value: 4 } })
 
