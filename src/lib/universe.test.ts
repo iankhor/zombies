@@ -1,16 +1,16 @@
 import {
-	createGrid,
+	createUniverse,
 	addEntity,
 	findEntity,
 	removeEntity,
 	moveEntity,
 	calculateDirectionMagnitude,
 	normaliseCoordinate,
-	infectGrid,
-} from 'lib/grid'
+	infectUniverse,
+} from 'lib/universe'
 
-describe('createGrid', () => {
-	const grid = createGrid(2)
+describe('createUniverse', () => {
+	const grid = createUniverse(2)
 	it('is a square grid', () => {
 		expect(grid[0]).toHaveLength(2)
 		expect(grid).toHaveLength(2)
@@ -25,7 +25,7 @@ describe('createGrid', () => {
 })
 
 describe('addEntity', () => {
-	const grid = createGrid(4)
+	const grid = createUniverse(4)
 
 	it('adds an entity to grid based on coordinates', () => {
 		const entity = { id: 2, type: 'zombie' }
@@ -49,23 +49,17 @@ describe('addEntity', () => {
 	})
 
 	it('throws an error if given invalid coordinates', () => {
-		const grid = createGrid(4)
+		const grid = createUniverse(4)
 		const entity = { id: 3, type: 'zombie' }
 
-		expect(() => addEntity(grid, -1, 3, entity)).toThrow(
-			'Invalid grid coordinates !'
-		)
-		expect(() => addEntity(grid, 0, -1, entity)).toThrow(
-			'Invalid grid coordinates !'
-		)
-		expect(() => addEntity(grid, 0, 4, entity)).toThrow(
-			'Invalid grid coordinates !'
-		)
+		expect(() => addEntity(grid, -1, 3, entity)).toThrow('Invalid grid coordinates !')
+		expect(() => addEntity(grid, 0, -1, entity)).toThrow('Invalid grid coordinates !')
+		expect(() => addEntity(grid, 0, 4, entity)).toThrow('Invalid grid coordinates !')
 	})
 })
 
 describe('findEntity', () => {
-	const grid = createGrid(5)
+	const grid = createUniverse(5)
 	const entity = { id: 2, type: 'zombie' }
 
 	it('returns coordinates of entity', () => {
@@ -80,7 +74,7 @@ describe('findEntity', () => {
 
 describe('removeEntity', () => {
 	it('removes an entity to grid based on coordinates', () => {
-		const grid = createGrid(4)
+		const grid = createUniverse(4)
 
 		grid[3][1].entities = [{ id: 9, type: 'zombie' }]
 
@@ -89,7 +83,7 @@ describe('removeEntity', () => {
 	})
 
 	it('removes an entity that does not exist', () => {
-		const grid = createGrid(4)
+		const grid = createUniverse(4)
 
 		grid[3][1].entities = [{ id: 9, type: 'zombie' }]
 
@@ -100,7 +94,7 @@ describe('removeEntity', () => {
 
 describe('moveEntity', () => {
 	const entity = { id: 2, type: 'creature' }
-	const grid = createGrid(2)
+	const grid = createUniverse(2)
 
 	it('moves to its new position on grid', () => {
 		grid[0][0].entities = [entity]
@@ -138,18 +132,13 @@ describe('calculateDirectionMagnitude', () => {
 		${'L'}      | ${{ x: -1, y: 0 }}
 		${'R'}      | ${{ x: 1, y: 0 }}
 		${'foobaz'} | ${{ x: 0, y: 0 }}
-	`(
-		'return $magnitudeCoordinates when given a direction of $direction',
-		({ direction, magnitudeCoordinates }) => {
-			expect(calculateDirectionMagnitude(direction)).toMatchObject(
-				magnitudeCoordinates
-			)
-		}
-	)
+	`('return $magnitudeCoordinates when given a direction of $direction', ({ direction, magnitudeCoordinates }) => {
+		expect(calculateDirectionMagnitude(direction)).toMatchObject(magnitudeCoordinates)
+	})
 })
 
 describe('normaliseCoordinate', () => {
-	const grid = createGrid(3)
+	const grid = createUniverse(3)
 
 	test.each`
 		movementMagnitude | normalisedMovementMagnitude
@@ -167,15 +156,13 @@ describe('normaliseCoordinate', () => {
 	`(
 		'return $normalisedMovementMagnitude when given a magnitude of $movementMagnitude for grid size 3',
 		({ movementMagnitude, normalisedMovementMagnitude }) => {
-			expect(normaliseCoordinate(grid.length, movementMagnitude)).toEqual(
-				normalisedMovementMagnitude
-			)
+			expect(normaliseCoordinate(grid.length, movementMagnitude)).toEqual(normalisedMovementMagnitude)
 		}
 	)
 })
 
-describe('infectGrid', () => {
-	const grid = createGrid(3)
+describe('infectUniverse', () => {
+	const grid = createUniverse(3)
 	grid[1][2] = {
 		entities: [
 			{ id: 2, type: 'creature' },
@@ -185,11 +172,9 @@ describe('infectGrid', () => {
 	}
 
 	it('will infect all entities within a grid to become zombies', () => {
-		const updatedGrid = infectGrid(grid, 1, 2)
+		const updatedGrid = infectUniverse(grid, 1, 2)
 
-		const numberofZombies = updatedGrid[1][2].entities.filter(
-			(e) => e.type === 'zombie'
-		).length
+		const numberofZombies = updatedGrid[1][2].entities.filter((e) => e.type === 'zombie').length
 
 		expect(numberofZombies).toEqual(3)
 	})

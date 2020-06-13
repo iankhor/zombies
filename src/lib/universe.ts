@@ -6,12 +6,12 @@ import { Entity, GridInfo, Coordinates, FoundEntity } from 'lib/gridTypes'
  *          the x and y coordinates of the grid.
  *
  *  ```
- *  const grid = createGrid(2)
+ *  const grid = createUniverse(2)
  *
  *  grid[1][3] // represent grid information for coordinate x of 1 and coordinates y of 3
  *  ```
  */
-export const createGrid = (size: number): GridInfo[][] => {
+export const createUniverse = (size: number): GridInfo[][] => {
 	const tempGrid = [] as GridInfo[][]
 	let x, y
 
@@ -164,7 +164,7 @@ export const calculateDirectionMagnitude = (direction: string): Coordinates => {
  * @param y vertical coordinates of the grid
  * @returns an updated grid with the entities in desired coordinates infected to be zombies
  */
-export const infectGrid = (grid: GridInfo[][], x: number, y: number): GridInfo[][] => {
+export const infectUniverse = (grid: GridInfo[][], x: number, y: number): GridInfo[][] => {
 	const infectedEntities = grid[x][y].entities.map((e) => ({
 		...e,
 		type: 'zombie',
